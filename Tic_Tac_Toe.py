@@ -18,7 +18,8 @@ def player_input(board):
     global player
     while True:
         try:
-            user_choice = int(input('enter your choice: '))
+            print(f'player {player} turn.')
+            user_choice = int(input('please enter your choice: '))
             if 1 <= user_choice <= 9 and board[user_choice-1].isdigit():
                 board[user_choice - 1] = player
                 return board
@@ -28,6 +29,7 @@ def player_input(board):
             print('error - you need to pick a number between 1 - 9.')
 
 def check_winner(board):
+    tie_check = False
     if (board[0] == 'x' and board[1] == 'x' and board[2] == 'x'or board[0] == 'o' and board[1] == 'o' and board[2] == 'o'
             or board[3] == 'x' and board[4] == 'x' and board[5] == 'x' or board[3] == 'o' and board[4] == 'o' and board[5] == 'o'
             or board[6] == 'x' and board[7] == 'x' and board[8] == 'x'or board[6] == 'o' and board[7] == 'o' and board[8] == 'o'):
@@ -48,19 +50,23 @@ def check_winner(board):
             return 'x winner'
         else:
             return 'o winner'
-    counter = 0
     for i in board:
-        if i == 'x' or i == 'o':
-            counter += 1
-        if counter == 9:
-            return 'tie'
+        if i.isdigit():
+            tie_check = True
+    if tie_check:
+        return True
+    elif not tie_check:
+        return 'tie'
     return True
 
 def play_game():
     global player
     global board
     regame = False
-    print('wellcome to game')
+    print('''
+    --------------------------------
+    | wellcome to Tic Tac Toe game |
+    --------------------------------''')
     display_board(board)
     while check_winner(board):
         player_input(board)
@@ -82,7 +88,7 @@ def play_game():
             regame = True
             break
     if regame:
-        restart = input("play again?")
+        restart = input("play again? ").lower().split()
         if restart == 'y':
             board = original_board
             play_game()
